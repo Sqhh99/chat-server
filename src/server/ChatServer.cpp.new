@@ -1,0 +1,173 @@
+// 处理验证码请求
+void ChatServer::handleVerifyCodeRequest(const muduo::net::TcpConnectionPtr& conn, 
+                                      const std::unordered_map<std::string, std::string>& msg) {
+    auto emailIt = msg.find("email");
+    if (emailIt == msg.end()) {
+        LOG_ERROR << "Invalid verification code request: missing email";
+        std::string errorMsg = std::to_string(static_cast<int>(MessageType::ERROR)) + 
+                             ":errorMsg=Missing email address";
+        conn->send(errorMsg);
+        return;
+    }
+    
+    std::string email = emailIt->second;
+    LOG_INFO << "Verification code requested for email: " << email;
+    
+    // 检查邮箱格式
+    if (email.find('@') == std::string::npos) {
+        LOG_ERROR << "Invalid email format: " << email;
+        std::string errorMsg = std::to_string(static_cast<int>(MessageType::ERROR)) + 
+                             ":errorMsg=Invalid email format";
+        conn->send(errorMsg);
+        return;
+    }
+    
+    // 检查邮箱是否已存在
+    if (UserModel::getInstance().isEmailExists(email)) {
+        LOG_ERROR << "Email already registered: " << email;
+        std::string errorMsg = std::to_string(static_cast<int>(MessageType::ERROR)) + 
+                             ":errorMsg=Email already registered";
+        conn->send(errorMsg);
+        return;
+    }
+    
+    // 生成验证码
+    std::string code = VerificationCodeService::getInstance().generateCode(email);
+    
+    // 构建邮件内容
+    std::string subject = "聊天服务器注册验证码";
+    std::string content = "您的注册验证码为: " + code + "\n\n"
+                        "该验证码在10分钟内有效。\n\n"
+                        "如果不是您本人操作，请忽略此邮件。\n\n"
+                        "此邮件为系统自动发送，请勿回复。";
+    
+    // 异步发送邮件，避免阻塞服务器主线程
+    std::thread([email, subject, content]() {
+        bool success = EmailService::getInstance().sendEmail(email, subject, content);
+        if (!success) {
+            LOG_ERROR << "Failed to send verification code email to " << email;
+        } else {
+            LOG_INFO << "Verification code email sent to " << email;
+        }
+    }).detach();
+    
+    // 发送响应
+    std::string response = std::to_string(static_cast<int>(MessageType::VERIFY_CODE_RESPONSE)) + 
+                         ":status=0;message=Verification code has been sent to your email";
+    conn->send(response);
+}
+
+// 处理注册请求
+void ChatServer::handleRegister(const muduo::net::TcpConnectionPtr& conn, 
+                             const std::unordered_map<std::string, std::string>& msg) {
+    // 检查必要的参数
+    auto usernameIt = msg.find("username");
+    auto passwordIt = msg.find("password");
+    auto emailIt = msg.find("email");
+    auto codeIt = msg.find("code");
+    
+    if (usernameIt == msg.end() || passwordIt == msg.end() || 
+        emailIt == msg.end() || codeIt == msg.end()) {
+        LOG_ERROR << "Invalid registration request: missing required parameters";
+        std::string errorMsg = std::to_string(static_cast<int>(MessageType::REGISTER_RESPONSE)) + 
+                             ":status=1;errorMsg=Missing required parameters";
+        conn->send(errorMsg);
+        return;
+    }
+    
+    std::string username = usernameIt->second;
+    std::string password = passwordIt->second;
+    std::string email = emailIt->second;
+    std::string code = codeIt->second;
+    
+    LOG_INFO << "Registration request for user: " << username << ", email: " << email;
+    
+    // 验证码检查
+    if (!VerificationCodeService::getInstance().verifyCode(email, code)) {
+        LOG_ERROR << "Invalid or expired verification code for " << email;
+        std::string errorMsg = std::to_string(static_cast<int>(MessageType::REGISTER_RESPONSE)) + 
+                             ":status=1;errorMsg=Invalid or expired verification code";
+        conn->send(errorMsg);
+        return;
+    }
+    
+    // 检查用户名是否已存在
+    if (UserModel::getInstance().isUserExists(username)) {
+        LOG_ERROR << "Username already exists: " << username;
+        std::string errorMsg = std::to_string(static_cast<int>(MessageType::REGISTER_RESPONSE)) + 
+                             ":status=1;errorMsg=Username already exists";
+        conn->send(errorMsg);
+        return;
+    }
+    
+    // 检查邮箱是否已存在
+    if (UserModel::getInstance().isEmailExists(email)) {
+        LOG_ERROR << "Email already exists: " << email;
+        std::string errorMsg = std::to_string(static_cast<int>(MessageType::REGISTER_RESPONSE)) + 
+                             ":status=1;errorMsg=Email already exists";
+        conn->send(errorMsg);
+        return;
+    }
+    
+    // 默认头像URL
+    std::string avatar = "";
+    auto avatarIt = msg.find("avatar");
+    if (avatarIt != msg.end()) {
+        avatar = avatarIt->second;
+    }
+    
+    // 注册用户
+    bool success = UserModel::getInstance().registerUser(username, password, email, avatar);
+    
+    if (success) {
+        LOG_INFO << "User registered successfully: " << username;
+        
+        // 发送邮件通知用户注册成功
+        std::string subject = "欢迎注册聊天服务器";
+        std::string content = "亲爱的 " + username + "，\n\n"
+                            "欢迎注册我们的聊天服务！您的账号已经成功创建。\n\n"
+                            "用户名: " + username + "\n"
+                            "邮箱: " + email + "\n\n"
+                            "您现在可以使用您的用户名和密码登录系统了。\n\n"
+                            "祝您使用愉快！\n\n"
+                            "聊天服务器团队";
+        
+        // 异步发送邮件
+        std::thread([email, subject, content]() {
+            EmailService::getInstance().sendEmail(email, subject, content);
+        }).detach();
+        
+        // 发送注册成功响应
+        std::string response = std::to_string(static_cast<int>(MessageType::REGISTER_RESPONSE)) + 
+                            ":status=0;username=" + username + ";email=" + email;
+        conn->send(response);
+        
+        // 获取用户信息并登录用户
+        std::shared_ptr<User> user = UserModel::getInstance().getUserByName(username);
+        if (user) {
+            // 将用户添加到连接映射
+            userConnectionMap_[user->getId()] = conn;
+            
+            // 发送登录成功响应
+            std::stringstream loginResponse;
+            loginResponse << static_cast<int>(MessageType::LOGIN_RESPONSE) << ":";
+            loginResponse << "status=0;"; // 0表示成功
+            loginResponse << "userId=" << user->getId() << ";";
+            loginResponse << "username=" << user->getUsername() << ";";
+            loginResponse << "email=" << user->getEmail();
+            
+            if (!user->getAvatar().empty()) {
+                loginResponse << ";avatar=" << user->getAvatar();
+            }
+            
+            conn->send(loginResponse.str());
+        }
+    } else {
+        LOG_ERROR << "Failed to register user: " << username;
+        
+        // 发送注册失败响应
+        std::string errorMsg = std::to_string(static_cast<int>(MessageType::REGISTER_RESPONSE)) + 
+                             ":status=1;errorMsg=Registration failed, please try again later";
+        conn->send(errorMsg);
+    }
+}

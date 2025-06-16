@@ -1,0 +1,93 @@
+// 新增用户注册功能
+bool UserModel::registerUser(const std::string& username, const std::string& password, 
+                            const std::string& email, const std::string& avatar) {
+    try {
+        // 先检查用户名和邮箱是否已存在
+        if (isUserExists(username)) {
+            LOG_INFO << "Cannot register: Username already exists: " << username;
+            return false;
+        }
+        
+        if (isEmailExists(email)) {
+            LOG_INFO << "Cannot register: Email already exists: " << email;
+            return false;
+        }
+        
+        auto conn = getConnection();
+        if (!conn) {
+            LOG_ERROR << "Failed to get database connection";
+            return false;
+        }
+        
+        // 开始事务
+        pqxx::work txn(*conn);
+        
+        // 准备插入语句
+        std::string sql = "INSERT INTO users (username, email, password, avatar, verified, create_time) VALUES ("
+                        + txn.quote(username) + ", "
+                        + txn.quote(email) + ", "
+                        + txn.quote(password) + ", "
+                        + txn.quote(avatar) + ", "
+                        + "TRUE, NOW()) RETURNING id";
+        
+        // 执行SQL并获取新插入的用户ID
+        pqxx::result result = txn.exec(sql);
+        txn.commit();
+        
+        if (!result.empty()) {
+            int userId = result[0][0].as<int>();
+            LOG_INFO << "User registered successfully: " << username << " (ID: " << userId << ")";
+            return true;
+        } else {
+            LOG_ERROR << "Failed to retrieve new user ID after registration";
+            return false;
+        }
+    } catch (const std::exception& e) {
+        LOG_ERROR << "Error registering user: " << e.what();
+        return false;
+    }
+}
+
+// 检查用户名是否已存在
+bool UserModel::isUserExists(const std::string& username) {
+    try {
+        auto conn = getConnection();
+        if (!conn) {
+            LOG_ERROR << "Failed to get database connection";
+            return false;
+        }
+        
+        pqxx::work txn(*conn);
+        
+        std::string sql = "SELECT COUNT(*) FROM users WHERE username = " + txn.quote(username);
+        pqxx::result result = txn.exec(sql);
+        
+        int count = result[0][0].as<int>();
+        return count > 0;
+    } catch (const std::exception& e) {
+        LOG_ERROR << "Error checking username existence: " << e.what();
+        return false;
+    }
+}
+
+// 检查邮箱是否已存在
+bool UserModel::isEmailExists(const std::string& email) {
+    try {
+        auto conn = getConnection();
+        if (!conn) {
+            LOG_ERROR << "Failed to get database connection";
+            return false;
+        }
+        
+        pqxx::work txn(*conn);
+        
+        std::string sql = "SELECT COUNT(*) FROM users WHERE email = " + txn.quote(email);
+        pqxx::result result = txn.exec(sql);
+        
+        int count = result[0][0].as<int>();
+        return count > 0;
+    } catch (const std::exception& e) {
+        LOG_ERROR << "Error checking email existence: " << e.what();
+        return false;
+    }
+}

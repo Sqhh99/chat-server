@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/smtp_cpp_test.dir/smtp_cpp_test.cpp.o -o smtp_cpp_test  -lPocoNetSSL -lPocoNet -lPocoFoundation -lPocoUtil /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/x86_64-linux-gnu/libcrypto.so 

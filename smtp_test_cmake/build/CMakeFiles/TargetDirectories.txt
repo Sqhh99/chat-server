@@ -1,0 +1,3 @@
+/home/sqhh99/workspace/cpp-workspace/chat-server/smtp_test_cmake/build/CMakeFiles/smtp_cpp_test.dir
+/home/sqhh99/workspace/cpp-workspace/chat-server/smtp_test_cmake/build/CMakeFiles/edit_cache.dir
+/home/sqhh99/workspace/cpp-workspace/chat-server/smtp_test_cmake/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,56 @@
+[
+{
+  "directory": "/home/sqhh99/workspace/cpp-workspace/chat-server/build",
+  "command": "/usr/bin/g++ -DPOCO_ENABLE_CPP11 -DPOCO_ENABLE_CPP14 -DPOCO_HAVE_FD_EPOLL -DPOCO_OS_FAMILY_UNIX -DPOCO_UNBUNDLED -D_DEBUG -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_REENTRANT -D_THREAD_SAFE -D_XOPEN_SOURCE=500 -I/home/sqhh99/workspace/cpp-workspace/chat-server -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/muduo/include -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/redis-plus-plus/include -I/usr/include/jsoncpp  -Wall -Wextra -pthread -Wno-error=pedantic -Wno-error -g -std=gnu++17 -o CMakeFiles/chat_server.dir/src/main.cpp.o -c /home/sqhh99/workspace/cpp-workspace/chat-server/src/main.cpp",
+  "file": "/home/sqhh99/workspace/cpp-workspace/chat-server/src/main.cpp",
+  "output": "CMakeFiles/chat_server.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/sqhh99/workspace/cpp-workspace/chat-server/build",
+  "command": "/usr/bin/g++ -DPOCO_ENABLE_CPP11 -DPOCO_ENABLE_CPP14 -DPOCO_HAVE_FD_EPOLL -DPOCO_OS_FAMILY_UNIX -DPOCO_UNBUNDLED -D_DEBUG -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_REENTRANT -D_THREAD_SAFE -D_XOPEN_SOURCE=500 -I/home/sqhh99/workspace/cpp-workspace/chat-server -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/muduo/include -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/redis-plus-plus/include -I/usr/include/jsoncpp  -Wall -Wextra -pthread -Wno-error=pedantic -Wno-error -g -std=gnu++17 -o CMakeFiles/chat_server.dir/src/model/UserModel.cpp.o -c /home/sqhh99/workspace/cpp-workspace/chat-server/src/model/UserModel.cpp",
+  "file": "/home/sqhh99/workspace/cpp-workspace/chat-server/src/model/UserModel.cpp",
+  "output": "CMakeFiles/chat_server.dir/src/model/UserModel.cpp.o"
+},
+{
+  "directory": "/home/sqhh99/workspace/cpp-workspace/chat-server/build",
+  "command": "/usr/bin/g++ -DPOCO_ENABLE_CPP11 -DPOCO_ENABLE_CPP14 -DPOCO_HAVE_FD_EPOLL -DPOCO_OS_FAMILY_UNIX -DPOCO_UNBUNDLED -D_DEBUG -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_REENTRANT -D_THREAD_SAFE -D_XOPEN_SOURCE=500 -I/home/sqhh99/workspace/cpp-workspace/chat-server -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/muduo/include -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/redis-plus-plus/include -I/usr/include/jsoncpp  -Wall -Wextra -pthread -Wno-error=pedantic -Wno-error -g -std=gnu++17 -o CMakeFiles/chat_server.dir/src/server/ChatServer.cpp.o -c /home/sqhh99/workspace/cpp-workspace/chat-server/src/server/ChatServer.cpp",
+  "file": "/home/sqhh99/workspace/cpp-workspace/chat-server/src/server/ChatServer.cpp",
+  "output": "CMakeFiles/chat_server.dir/src/server/ChatServer.cpp.o"
+},
+{
+  "directory": "/home/sqhh99/workspace/cpp-workspace/chat-server/build",
+  "command": "/usr/bin/g++ -DPOCO_ENABLE_CPP11 -DPOCO_ENABLE_CPP14 -DPOCO_HAVE_FD_EPOLL -DPOCO_OS_FAMILY_UNIX -DPOCO_UNBUNDLED -D_DEBUG -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_REENTRANT -D_THREAD_SAFE -D_XOPEN_SOURCE=500 -I/home/sqhh99/workspace/cpp-workspace/chat-server -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/muduo/include -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/redis-plus-plus/include -I/usr/include/jsoncpp  -Wall -Wextra -pthread -Wno-error=pedantic -Wno-error -g -std=gnu++17 -o CMakeFiles/chat_server.dir/src/service/EmailService.cpp.o -c /home/sqhh99/workspace/cpp-workspace/chat-server/src/service/EmailService.cpp",
+  "file": "/home/sqhh99/workspace/cpp-workspace/chat-server/src/service/EmailService.cpp",
+  "output": "CMakeFiles/chat_server.dir/src/service/EmailService.cpp.o"
+},
+{
+  "directory": "/home/sqhh99/workspace/cpp-workspace/chat-server/build",
+  "command": "/usr/bin/g++ -DPOCO_ENABLE_CPP11 -DPOCO_ENABLE_CPP14 -DPOCO_HAVE_FD_EPOLL -DPOCO_OS_FAMILY_UNIX -DPOCO_UNBUNDLED -D_DEBUG -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_REENTRANT -D_THREAD_SAFE -D_XOPEN_SOURCE=500 -I/home/sqhh99/workspace/cpp-workspace/chat-server -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/muduo/include -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/redis-plus-plus/include -I/usr/include/jsoncpp  -Wall -Wextra -pthread -Wno-error=pedantic -Wno-error -g -std=gnu++17 -o CMakeFiles/chat_server.dir/src/service/VerificationCodeService.cpp.o -c /home/sqhh99/workspace/cpp-workspace/chat-server/src/service/VerificationCodeService.cpp",
+  "file": "/home/sqhh99/workspace/cpp-workspace/chat-server/src/service/VerificationCodeService.cpp",
+  "output": "CMakeFiles/chat_server.dir/src/service/VerificationCodeService.cpp.o"
+},
+{
+  "directory": "/home/sqhh99/workspace/cpp-workspace/chat-server/build",
+  "command": "/usr/bin/g++ -DPOCO_ENABLE_CPP11 -DPOCO_ENABLE_CPP14 -DPOCO_HAVE_FD_EPOLL -DPOCO_OS_FAMILY_UNIX -DPOCO_UNBUNDLED -D_DEBUG -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_REENTRANT -D_THREAD_SAFE -D_XOPEN_SOURCE=500 -I/home/sqhh99/workspace/cpp-workspace/chat-server -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/muduo/include -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/redis-plus-plus/include -I/usr/include/jsoncpp  -Wall -Wextra -pthread -Wno-error=pedantic -Wno-error -g -std=gnu++17 -o CMakeFiles/chat_server.dir/src/service/RedisService.cpp.o -c /home/sqhh99/workspace/cpp-workspace/chat-server/src/service/RedisService.cpp",
+  "file": "/home/sqhh99/workspace/cpp-workspace/chat-server/src/service/RedisService.cpp",
+  "output": "CMakeFiles/chat_server.dir/src/service/RedisService.cpp.o"
+},
+{
+  "directory": "/home/sqhh99/workspace/cpp-workspace/chat-server/build",
+  "command": "/usr/bin/g++ -DPOCO_ENABLE_CPP11 -DPOCO_ENABLE_CPP14 -DPOCO_HAVE_FD_EPOLL -DPOCO_OS_FAMILY_UNIX -DPOCO_UNBUNDLED -D_DEBUG -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_REENTRANT -D_THREAD_SAFE -D_XOPEN_SOURCE=500 -I/home/sqhh99/workspace/cpp-workspace/chat-server -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/muduo/include -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/redis-plus-plus/include -I/usr/include/jsoncpp  -Wall -Wextra -pthread -Wno-error=pedantic -Wno-error -g -std=gnu++17 -o CMakeFiles/chat_server.dir/src/service/MessageArchiveService.cpp.o -c /home/sqhh99/workspace/cpp-workspace/chat-server/src/service/MessageArchiveService.cpp",
+  "file": "/home/sqhh99/workspace/cpp-workspace/chat-server/src/service/MessageArchiveService.cpp",
+  "output": "CMakeFiles/chat_server.dir/src/service/MessageArchiveService.cpp.o"
+},
+{
+  "directory": "/home/sqhh99/workspace/cpp-workspace/chat-server/build",
+  "command": "/usr/bin/g++ -DPOCO_ENABLE_CPP11 -DPOCO_ENABLE_CPP14 -DPOCO_HAVE_FD_EPOLL -DPOCO_OS_FAMILY_UNIX -DPOCO_UNBUNDLED -D_DEBUG -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_REENTRANT -D_THREAD_SAFE -D_XOPEN_SOURCE=500 -I/home/sqhh99/workspace/cpp-workspace/chat-server -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/muduo/include -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/redis-plus-plus/include -I/usr/include/jsoncpp  -Wall -Wextra -pthread -Wno-error=pedantic -Wno-error -g -std=gnu++17 -o CMakeFiles/chat_server.dir/src/server/ChatServer.chat.cpp.o -c /home/sqhh99/workspace/cpp-workspace/chat-server/src/server/ChatServer.chat.cpp",
+  "file": "/home/sqhh99/workspace/cpp-workspace/chat-server/src/server/ChatServer.chat.cpp",
+  "output": "CMakeFiles/chat_server.dir/src/server/ChatServer.chat.cpp.o"
+},
+{
+  "directory": "/home/sqhh99/workspace/cpp-workspace/chat-server/build",
+  "command": "/usr/bin/g++ -DPOCO_ENABLE_CPP11 -DPOCO_ENABLE_CPP14 -DPOCO_HAVE_FD_EPOLL -DPOCO_OS_FAMILY_UNIX -DPOCO_UNBUNDLED -D_DEBUG -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_REENTRANT -D_THREAD_SAFE -D_XOPEN_SOURCE=500 -I/home/sqhh99/workspace/cpp-workspace/chat-server -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/muduo/include -I/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/redis-plus-plus/include -I/usr/include/jsoncpp  -Wall -Wextra -pthread -Wno-error=pedantic -Wno-error -g -std=gnu++17 -o CMakeFiles/chat_server.dir/src/server/ChatServer.message.cpp.o -c /home/sqhh99/workspace/cpp-workspace/chat-server/src/server/ChatServer.message.cpp",
+  "file": "/home/sqhh99/workspace/cpp-workspace/chat-server/src/server/ChatServer.message.cpp",
+  "output": "CMakeFiles/chat_server.dir/src/server/ChatServer.message.cpp.o"
+}
+]

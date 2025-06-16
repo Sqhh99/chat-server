@@ -1,0 +1,581 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "chat_server"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"install",
+			"target_link_libraries",
+			"set_target_properties",
+			"include",
+			"find_package",
+			"find_dependency",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt",
+			"/usr/lib/x86_64-linux-gnu/cmake/Poco/PocoNetSSLTargets.cmake",
+			"/usr/lib/x86_64-linux-gnu/cmake/Poco/PocoNetSSLConfig.cmake",
+			"/usr/lib/x86_64-linux-gnu/cmake/Poco/PocoConfig.cmake",
+			"/usr/lib/x86_64-linux-gnu/cmake/Poco/PocoCryptoTargets.cmake",
+			"/usr/lib/x86_64-linux-gnu/cmake/Poco/PocoCryptoConfig.cmake",
+			"/usr/share/cmake-3.28/Modules/CMakeFindDependencyMacro.cmake",
+			"/usr/lib/x86_64-linux-gnu/cmake/Poco/PocoUtilTargets.cmake",
+			"/usr/lib/x86_64-linux-gnu/cmake/Poco/PocoUtilConfig.cmake",
+			"/usr/lib/x86_64-linux-gnu/cmake/Poco/PocoXMLTargets.cmake",
+			"/usr/lib/x86_64-linux-gnu/cmake/Poco/PocoXMLConfig.cmake",
+			"/usr/lib/x86_64-linux-gnu/cmake/Poco/PocoFoundationTargets.cmake",
+			"/usr/lib/x86_64-linux-gnu/cmake/Poco/PocoFoundationConfig.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 51,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 70,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 54,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 21,
+				"parent" : 0
+			},
+			{
+				"file" : 3,
+				"parent" : 4
+			},
+			{
+				"command" : 5,
+				"file" : 3,
+				"line" : 29,
+				"parent" : 5
+			},
+			{
+				"file" : 2,
+				"parent" : 6
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 7,
+				"parent" : 7
+			},
+			{
+				"file" : 1,
+				"parent" : 8
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 71,
+				"parent" : 9
+			},
+			{
+				"command" : 6,
+				"file" : 2,
+				"line" : 5,
+				"parent" : 7
+			},
+			{
+				"command" : 5,
+				"file" : 6,
+				"line" : 76,
+				"parent" : 11
+			},
+			{
+				"file" : 5,
+				"parent" : 12
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 4,
+				"parent" : 13
+			},
+			{
+				"file" : 4,
+				"parent" : 14
+			},
+			{
+				"command" : 3,
+				"file" : 4,
+				"line" : 71,
+				"parent" : 15
+			},
+			{
+				"command" : 6,
+				"file" : 2,
+				"line" : 3,
+				"parent" : 7
+			},
+			{
+				"command" : 5,
+				"file" : 6,
+				"line" : 76,
+				"parent" : 17
+			},
+			{
+				"file" : 8,
+				"parent" : 18
+			},
+			{
+				"command" : 4,
+				"file" : 8,
+				"line" : 5,
+				"parent" : 19
+			},
+			{
+				"file" : 7,
+				"parent" : 20
+			},
+			{
+				"command" : 3,
+				"file" : 7,
+				"line" : 71,
+				"parent" : 21
+			},
+			{
+				"command" : 6,
+				"file" : 8,
+				"line" : 3,
+				"parent" : 19
+			},
+			{
+				"command" : 5,
+				"file" : 6,
+				"line" : 76,
+				"parent" : 23
+			},
+			{
+				"file" : 10,
+				"parent" : 24
+			},
+			{
+				"command" : 4,
+				"file" : 10,
+				"line" : 10,
+				"parent" : 25
+			},
+			{
+				"file" : 9,
+				"parent" : 26
+			},
+			{
+				"command" : 3,
+				"file" : 9,
+				"line" : 71,
+				"parent" : 27
+			},
+			{
+				"command" : 5,
+				"file" : 3,
+				"line" : 29,
+				"parent" : 5
+			},
+			{
+				"file" : 12,
+				"parent" : 29
+			},
+			{
+				"command" : 4,
+				"file" : 12,
+				"line" : 8,
+				"parent" : 30
+			},
+			{
+				"file" : 11,
+				"parent" : 31
+			},
+			{
+				"command" : 3,
+				"file" : 11,
+				"line" : 71,
+				"parent" : 32
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 32,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 33,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 34,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 35,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : " -Wall -Wextra -pthread -Wno-error=pedantic -Wno-error -g -std=gnu++17"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 3,
+					"define" : "POCO_ENABLE_CPP11"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "POCO_ENABLE_CPP14"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "POCO_HAVE_FD_EPOLL"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "POCO_OS_FAMILY_UNIX"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "POCO_UNBUNDLED"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "_DEBUG"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "_FILE_OFFSET_BITS=64"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "_LARGEFILE64_SOURCE"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "_REENTRANT"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "_THREAD_SAFE"
+				},
+				{
+					"backtrace" : 3,
+					"define" : "_XOPEN_SOURCE=500"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 34,
+					"path" : "/home/sqhh99/workspace/cpp-workspace/chat-server"
+				},
+				{
+					"backtrace" : 35,
+					"path" : "/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/muduo/include"
+				},
+				{
+					"backtrace" : 36,
+					"path" : "/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/redis-plus-plus/include"
+				},
+				{
+					"backtrace" : 37,
+					"path" : "/usr/include/jsoncpp"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					3,
+					3
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8
+			]
+		}
+	],
+	"id" : "chat_server::@6890427a1f51a3e7e1df",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 2,
+				"path" : "bin"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "/usr/local"
+		}
+	},
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-Wall -Wextra -pthread -Wno-error=pedantic -Wno-error -g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/redis-plus-plus/lib:",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/muduo/lib/libmuduo_net.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/muduo/lib/libmuduo_base.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libpqxx.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libpq.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libPocoNetSSL.so.80",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/home/sqhh99/workspace/cpp-workspace/chat-server/third_party/redis-plus-plus/lib/libredis++.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libhiredis.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-ljsoncpp",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lpthread",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lrt",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libPocoNet.so.80",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 10,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libPocoCrypto.so.80",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libssl.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libcrypto.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 10,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libPocoUtil.so.80",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 22,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libPocoXML.so.80",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 28,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libexpat.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 22,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libPocoJSON.so.80",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libPocoFoundation.so.80",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lpthread",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 33,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libpcre.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 33,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libz.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 33,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
+				"fragment" : "-lrt",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "chat_server",
+	"nameOnDisk" : "chat_server",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/main.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/model/UserModel.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/server/ChatServer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/service/EmailService.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/service/VerificationCodeService.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/service/RedisService.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/service/MessageArchiveService.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/server/ChatServer.chat.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/server/ChatServer.message.cpp",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}
