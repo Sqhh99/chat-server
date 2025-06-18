@@ -78,8 +78,20 @@ ChatServer::ChatServer(muduo::net::EventLoop* loop,
     msgHandlerMap_[static_cast<int>(MessageType::GET_USER_FRIENDS)] =
         std::bind(&ChatServer::handleGetUserFriends, this, _1, _2);
         
-    msgHandlerMap_[static_cast<int>(MessageType::ADD_FRIEND)] =
-        std::bind(&ChatServer::handleAddFriend, this, _1, _2);
+    msgHandlerMap_[static_cast<int>(MessageType::ADD_FRIEND_REQUEST)] =
+        std::bind(&ChatServer::handleAddFriendRequest, this, _1, _2);
+        
+    msgHandlerMap_[static_cast<int>(MessageType::ACCEPT_FRIEND_REQUEST)] =
+        std::bind(&ChatServer::handleAcceptFriendRequest, this, _1, _2);
+        
+    msgHandlerMap_[static_cast<int>(MessageType::REJECT_FRIEND_REQUEST)] =
+        std::bind(&ChatServer::handleRejectFriendRequest, this, _1, _2);
+        
+    msgHandlerMap_[static_cast<int>(MessageType::GET_FRIEND_REQUESTS)] =
+        std::bind(&ChatServer::handleGetFriendRequests, this, _1, _2);
+        
+    // 保留旧的ADD_FRIEND处理器以兼容性 (使用数字28作为向后兼容)
+    msgHandlerMap_[28] = std::bind(&ChatServer::handleAddFriend, this, _1, _2);
         
     msgHandlerMap_[static_cast<int>(MessageType::GET_CHAT_HISTORY)] =
         std::bind(&ChatServer::handleGetChatHistory, this, _1, _2);

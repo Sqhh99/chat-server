@@ -56,25 +56,7 @@ public:
     // 获取所有在线用户
     std::vector<int> getOnlineUsers();
     
-    // 发送好友请求
-    bool sendFriendRequest(int fromUserId, int toUserId);
-    
-    // 接受好友请求
-    bool acceptFriendRequest(int fromUserId, int toUserId);
-    
-    // 拒绝好友请求
-    bool rejectFriendRequest(int fromUserId, int toUserId);
-    
-    // 获取收到的好友请求列表
-    std::vector<int> getReceivedFriendRequests(int userId);
-    
-    // 获取发出的好友请求列表
-    std::vector<int> getSentFriendRequests(int userId);
-    
-    // 检查好友请求是否存在
-    bool hasFriendRequest(int fromUserId, int toUserId);
-    
-    // 添加好友（已通过验证）
+    // 添加好友
     bool addFriend(int userId1, int userId2);
     
     // 移除好友
@@ -85,6 +67,21 @@ public:
     
     // 检查两个用户是否是好友
     bool isFriend(int userId1, int userId2);
+    
+    // 发送好友请求
+    bool sendFriendRequest(int fromUserId, int toUserId);
+    
+    // 接受好友请求
+    bool acceptFriendRequest(int fromUserId, int toUserId);
+    
+    // 拒绝好友请求
+    bool rejectFriendRequest(int fromUserId, int toUserId);
+    
+    // 获取用户的好友请求列表
+    std::vector<std::pair<int, std::string>> getFriendRequests(int userId);  // 返回 {userId, username} 对
+    
+    // 检查是否已发送好友请求
+    bool hasFriendRequest(int fromUserId, int toUserId);
     
     // 标记消息为已读
     bool markMessageAsRead(int userId, const std::string& messageId);
@@ -164,6 +161,9 @@ private:
     
     // 生成用户好友键
     std::string getUserFriendsKey(int userId);
+    
+    // 生成好友请求键
+    std::string getFriendRequestsKey(int userId);
     
     // 在线用户集合键
     const std::string ONLINE_USERS_KEY = "online:users";

@@ -45,18 +45,24 @@ enum class MessageType {
     GROUP_MEMBERS_RESPONSE = 25, // 群成员响应
     GET_USER_FRIENDS = 26, // 获取好友列表
     USER_FRIENDS_RESPONSE = 27, // 好友列表响应
-    ADD_FRIEND = 28,       // 添加好友
-    ADD_FRIEND_RESPONSE = 29, // 添加好友响应
-    GET_CHAT_HISTORY = 30, // 获取聊天记录
-    CHAT_HISTORY_RESPONSE = 31, // 聊天记录响应
-    RECALL_MESSAGE = 32,   // 撤回消息
-    RECALL_MESSAGE_RESPONSE = 33, // 撤回消息响应
-    MARK_MESSAGE_READ = 34, // 标记消息已读
-    MARK_MESSAGE_READ_RESPONSE = 35, // 标记消息已读响应
-    FILE_MESSAGE = 36,     // 文件消息
-    FILE_MESSAGE_RESPONSE = 37, // 文件消息响应
-    IMAGE_MESSAGE = 38,    // 图片消息
-    IMAGE_MESSAGE_RESPONSE = 39 // 图片消息响应
+    ADD_FRIEND_REQUEST = 28,  // 发送好友请求
+    ADD_FRIEND_RESPONSE = 29, // 好友请求响应
+    ACCEPT_FRIEND_REQUEST = 30, // 接受好友请求
+    ACCEPT_FRIEND_RESPONSE = 31, // 接受好友请求响应
+    REJECT_FRIEND_REQUEST = 32, // 拒绝好友请求
+    REJECT_FRIEND_RESPONSE = 33, // 拒绝好友请求响应
+    GET_FRIEND_REQUESTS = 34, // 获取好友请求列表
+    FRIEND_REQUESTS_RESPONSE = 35, // 好友请求列表响应
+    GET_CHAT_HISTORY = 36, // 获取聊天记录
+    CHAT_HISTORY_RESPONSE = 37, // 聊天记录响应
+    RECALL_MESSAGE = 38,   // 撤回消息
+    RECALL_MESSAGE_RESPONSE = 39, // 撤回消息响应
+    MARK_MESSAGE_READ = 40, // 标记消息已读
+    MARK_MESSAGE_READ_RESPONSE = 41, // 标记消息已读响应
+    FILE_MESSAGE = 42,     // 文件消息
+    FILE_MESSAGE_RESPONSE = 43, // 文件消息响应
+    IMAGE_MESSAGE = 44,    // 图片消息
+    IMAGE_MESSAGE_RESPONSE = 45 // 图片消息响应
 };
 
 // 聊天服务器类
@@ -133,7 +139,19 @@ private:
     // 处理获取好友列表
     void handleGetUserFriends(const muduo::net::TcpConnectionPtr& conn, const std::unordered_map<std::string, std::string>& msg);
     
-    // 处理添加好友
+    // 处理发送好友请求
+    void handleAddFriendRequest(const muduo::net::TcpConnectionPtr& conn, const std::unordered_map<std::string, std::string>& msg);
+    
+    // 处理接受好友请求
+    void handleAcceptFriendRequest(const muduo::net::TcpConnectionPtr& conn, const std::unordered_map<std::string, std::string>& msg);
+    
+    // 处理拒绝好友请求
+    void handleRejectFriendRequest(const muduo::net::TcpConnectionPtr& conn, const std::unordered_map<std::string, std::string>& msg);
+    
+    // 处理获取好友请求列表
+    void handleGetFriendRequests(const muduo::net::TcpConnectionPtr& conn, const std::unordered_map<std::string, std::string>& msg);
+    
+    // 处理添加好友 (已废弃，保留向后兼容)
     void handleAddFriend(const muduo::net::TcpConnectionPtr& conn, const std::unordered_map<std::string, std::string>& msg);
     
     // 处理获取聊天记录

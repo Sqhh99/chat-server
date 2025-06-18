@@ -549,20 +549,26 @@ void ChatServer::handleGetUserFriends(const muduo::net::TcpConnectionPtr& conn, 
     LOG_INFO << "Friends list sent to user " << fromUserId;
 }
 
-// 处理添加好友
+// 处理添加好友 (改为发送好友请求)
 void ChatServer::handleAddFriend(const muduo::net::TcpConnectionPtr& conn, const std::unordered_map<std::string, std::string>& msg) {
+    // 为了向后兼容，将ADD_FRIEND消息重定向到ADD_FRIEND_REQUEST处理
+    handleAddFriendRequest(conn, msg);
+}
+
+// 处理发送好友请求
+void ChatServer::handleAddFriendRequest(const muduo::net::TcpConnectionPtr& conn, const std::unordered_map<std::string, std::string>& msg) {
     // 获取发送者ID
     int fromUserId = getUserIdByConnection(conn);
     if (fromUserId == -1) {
-        LOG_ERROR << "User not logged in. Cannot add friend.";
-        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=You must be logged in to add a friend");
+        LOG_ERROR << "User not logged in. Cannot send friend request.";
+        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=You must be logged in to send a friend request");
         return;
     }
     
     // 获取好友ID或用户名
     auto friendIdIt = msg.find("friendId");
     if (friendIdIt == msg.end()) {
-        LOG_ERROR << "Invalid add friend request. Missing friendId.";
+        LOG_ERROR << "Invalid friend request. Missing friendId.";
         conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=Invalid request format");
         return;
     }
@@ -589,25 +595,27 @@ void ChatServer::handleAddFriend(const muduo::net::TcpConnectionPtr& conn, const
     
     // 检查好友是否存在
     if (!friendUser) {
-        LOG_ERROR << "User '" << friendIdentifier << "' does not exist. Cannot add as friend.";
+        LOG_ERROR << "User '" << friendIdentifier << "' does not exist. Cannot send friend request.";
         conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=User does not exist");
         return;
     }
     
     // 检查是否是自己
     if (fromUserId == friendId) {
-        LOG_ERROR << "User " << fromUserId << " tried to add himself as a friend.";
-        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=You cannot add yourself as a friend");
-        return;
-    }
-    if (!friendUser) {
-        LOG_ERROR << "User " << friendId << " does not exist. Cannot add as friend.";
-        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=User does not exist");
+        LOG_ERROR << "User " << fromUserId << " tried to send friend request to himself.";
+        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=You cannot send friend request to yourself");
         return;
     }
     
-    // 添加好友关系
-    bool success = RedisService::getInstance().addFriend(fromUserId, friendId);
+    // 检查是否已经是好友
+    if (RedisService::getInstance().isFriend(fromUserId, friendId)) {
+        LOG_ERROR << "User " << fromUserId << " and user " << friendId << " are already friends.";
+        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=You are already friends with this user");
+        return;
+    }
+    
+    // 发送好友请求
+    bool success = RedisService::getInstance().sendFriendRequest(fromUserId, friendId);
     
     // 构建响应消息
     std::string response;
@@ -615,19 +623,218 @@ void ChatServer::handleAddFriend(const muduo::net::TcpConnectionPtr& conn, const
         response = std::to_string(static_cast<int>(MessageType::ADD_FRIEND_RESPONSE)) + 
                  ":status=0" + 
                  ";friendId=" + std::to_string(friendId) + 
-                 ";username=" + friendUser->getUsername();
+                 ";username=" + friendUser->getUsername() +
+                 ";message=Friend request sent successfully";
         
-        LOG_INFO << "User " << fromUserId << " added user " << friendId << " as friend";
+        LOG_INFO << "User " << fromUserId << " sent friend request to user " << friendId;
+        
+        // 如果目标用户在线，通知他有新的好友请求
+        auto targetConn = getConnectionByUserId(friendId);
+        if (targetConn) {
+            auto senderUser = UserModel::getInstance().getUserById(fromUserId);
+            if (senderUser) {
+                std::string notification = std::to_string(static_cast<int>(MessageType::ADD_FRIEND_REQUEST)) + 
+                                         ":fromUserId=" + std::to_string(fromUserId) +
+                                         ";username=" + senderUser->getUsername() +
+                                         ";message=You have a new friend request";
+                targetConn->send(notification);
+            }
+        }
     } else {
         response = std::to_string(static_cast<int>(MessageType::ADD_FRIEND_RESPONSE)) + 
                  ":status=1" + 
-                 ";message=Failed to add friend";
+                 ";message=Failed to send friend request";
         
-        LOG_ERROR << "Failed to add user " << friendId << " as friend for user " << fromUserId;
+        LOG_ERROR << "Failed to send friend request from user " << fromUserId << " to user " << friendId;
     }
     
     // 发送响应给用户
     conn->send(response);
+}
+
+// 处理接受好友请求
+void ChatServer::handleAcceptFriendRequest(const muduo::net::TcpConnectionPtr& conn, const std::unordered_map<std::string, std::string>& msg) {
+    // 获取发送者ID
+    int toUserId = getUserIdByConnection(conn);
+    if (toUserId == -1) {
+        LOG_ERROR << "User not logged in. Cannot accept friend request.";
+        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=You must be logged in to accept friend request");
+        return;
+    }
+    
+    // 获取请求发送者的ID
+    auto fromUserIdIt = msg.find("fromUserId");
+    if (fromUserIdIt == msg.end()) {
+        LOG_ERROR << "Invalid accept friend request. Missing fromUserId.";
+        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=Invalid request format");
+        return;
+    }
+    
+    // 更新连接活动时间
+    connectionLastActiveTime_[conn] = muduo::Timestamp::now();
+    
+    int fromUserId;
+    try {
+        fromUserId = std::stoi(fromUserIdIt->second);
+    } catch (const std::exception& e) {
+        LOG_ERROR << "Invalid fromUserId: " << fromUserIdIt->second;
+        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=Invalid user ID");
+        return;
+    }
+    
+    // 检查请求发送者是否存在
+    auto fromUser = UserModel::getInstance().getUserById(fromUserId);
+    if (!fromUser) {
+        LOG_ERROR << "User " << fromUserId << " does not exist.";
+        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=User does not exist");
+        return;
+    }
+    
+    // 接受好友请求
+    bool success = RedisService::getInstance().acceptFriendRequest(fromUserId, toUserId);
+    
+    // 构建响应消息
+    std::string response;
+    if (success) {
+        response = std::to_string(static_cast<int>(MessageType::ACCEPT_FRIEND_RESPONSE)) + 
+                 ":status=0" + 
+                 ";fromUserId=" + std::to_string(fromUserId) + 
+                 ";username=" + fromUser->getUsername() +
+                 ";message=Friend request accepted successfully";
+        
+        LOG_INFO << "User " << toUserId << " accepted friend request from user " << fromUserId;
+        
+        // 如果请求发送者在线，通知他好友请求被接受
+        auto fromConn = getConnectionByUserId(fromUserId);
+        if (fromConn) {
+            auto toUser = UserModel::getInstance().getUserById(toUserId);
+            if (toUser) {
+                std::string notification = std::to_string(static_cast<int>(MessageType::ACCEPT_FRIEND_RESPONSE)) + 
+                                         ":toUserId=" + std::to_string(toUserId) +
+                                         ";username=" + toUser->getUsername() +
+                                         ";message=Your friend request has been accepted";
+                fromConn->send(notification);
+            }
+        }
+    } else {
+        response = std::to_string(static_cast<int>(MessageType::ACCEPT_FRIEND_RESPONSE)) + 
+                 ":status=1" + 
+                 ";message=Failed to accept friend request";
+        
+        LOG_ERROR << "Failed to accept friend request from user " << fromUserId << " to user " << toUserId;
+    }
+    
+    // 发送响应给用户
+    conn->send(response);
+}
+
+// 处理拒绝好友请求
+void ChatServer::handleRejectFriendRequest(const muduo::net::TcpConnectionPtr& conn, const std::unordered_map<std::string, std::string>& msg) {
+    // 获取发送者ID
+    int toUserId = getUserIdByConnection(conn);
+    if (toUserId == -1) {
+        LOG_ERROR << "User not logged in. Cannot reject friend request.";
+        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=You must be logged in to reject friend request");
+        return;
+    }
+    
+    // 获取请求发送者的ID
+    auto fromUserIdIt = msg.find("fromUserId");
+    if (fromUserIdIt == msg.end()) {
+        LOG_ERROR << "Invalid reject friend request. Missing fromUserId.";
+        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=Invalid request format");
+        return;
+    }
+    
+    // 更新连接活动时间
+    connectionLastActiveTime_[conn] = muduo::Timestamp::now();
+    
+    int fromUserId;
+    try {
+        fromUserId = std::stoi(fromUserIdIt->second);
+    } catch (const std::exception& e) {
+        LOG_ERROR << "Invalid fromUserId: " << fromUserIdIt->second;
+        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=Invalid user ID");
+        return;
+    }
+    
+    // 检查请求发送者是否存在
+    auto fromUser = UserModel::getInstance().getUserById(fromUserId);
+    if (!fromUser) {
+        LOG_ERROR << "User " << fromUserId << " does not exist.";
+        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=User does not exist");
+        return;
+    }
+    
+    // 拒绝好友请求
+    bool success = RedisService::getInstance().rejectFriendRequest(fromUserId, toUserId);
+    
+    // 构建响应消息
+    std::string response;
+    if (success) {
+        response = std::to_string(static_cast<int>(MessageType::REJECT_FRIEND_RESPONSE)) + 
+                 ":status=0" + 
+                 ";fromUserId=" + std::to_string(fromUserId) + 
+                 ";username=" + fromUser->getUsername() +
+                 ";message=Friend request rejected successfully";
+        
+        LOG_INFO << "User " << toUserId << " rejected friend request from user " << fromUserId;
+        
+        // 可以选择是否通知请求发送者被拒绝（这里不通知，避免打扰）
+    } else {
+        response = std::to_string(static_cast<int>(MessageType::REJECT_FRIEND_RESPONSE)) + 
+                 ":status=1" + 
+                 ";message=Failed to reject friend request";
+        
+        LOG_ERROR << "Failed to reject friend request from user " << fromUserId << " to user " << toUserId;
+    }
+    
+    // 发送响应给用户
+    conn->send(response);
+}
+
+// 处理获取好友请求列表
+void ChatServer::handleGetFriendRequests(const muduo::net::TcpConnectionPtr& conn, const std::unordered_map<std::string, std::string>& /* msg */) {
+    // 获取发送者ID
+    int userId = getUserIdByConnection(conn);
+    if (userId == -1) {
+        LOG_ERROR << "User not logged in. Cannot get friend requests.";
+        conn->send(std::to_string(static_cast<int>(MessageType::ERROR)) + ":message=You must be logged in to get friend requests");
+        return;
+    }
+    
+    // 更新连接活动时间
+    connectionLastActiveTime_[conn] = muduo::Timestamp::now();
+    
+    // 获取好友请求列表
+    std::vector<std::pair<int, std::string>> requests = RedisService::getInstance().getFriendRequests(userId);
+    
+    // 构建好友请求列表JSON
+    Json::Value requestList(Json::arrayValue);
+    for (const auto& request : requests) {
+        int requestUserId = request.first;
+        auto requestUser = UserModel::getInstance().getUserById(requestUserId);
+        if (requestUser) {
+            Json::Value requestObj;
+            requestObj["id"] = requestUserId;
+            requestObj["username"] = requestUser->getUsername();
+            requestObj["online"] = RedisService::getInstance().isUserOnline(requestUserId);
+            requestList.append(requestObj);
+        }
+    }
+    
+    // 转换为字符串（使用紧凑格式）
+    std::string requestListStr = compactJsonString(requestList);
+    
+    // 构建响应消息
+    std::string response = std::to_string(static_cast<int>(MessageType::FRIEND_REQUESTS_RESPONSE)) + 
+                         ":status=0" + 
+                         ";requests=" + requestListStr;
+    
+    // 发送响应给用户
+    conn->send(response);
+    
+    LOG_INFO << "Friend requests list sent to user " << userId << ", found " << requests.size() << " requests";
 }
 
 // 处理获取聊天记录
